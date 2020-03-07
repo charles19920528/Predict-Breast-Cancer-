@@ -2,14 +2,20 @@ import pandas as pd
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
+from pandas.plotting import scatter_matrix
 import numpy as np
 
+cancer_dt = pd.read_csv("data/dataR2.csv")
 cancer_dt = pd.read_csv("data/cancer_train_dt.csv")
 predictor_dt = cancer_dt.drop("Classification", axis=1)
 
 scaler = StandardScaler()
 scaler.fit(predictor_dt)
 scaled_predictor_dt = scaler.transform(predictor_dt)
+
+# There are some samples with extremely large mcp.1
+scatter_matrix(cancer_dt.drop(["Classification"], axis= 1))
+np.sort(cancer_dt["MCP.1"])
 
 #######
 # PCA #
