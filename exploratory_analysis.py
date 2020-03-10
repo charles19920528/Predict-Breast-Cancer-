@@ -6,7 +6,7 @@ from pandas.plotting import scatter_matrix
 import numpy as np
 
 cancer_dt = pd.read_csv("data/dataR2.csv")
-cancer_dt = pd.read_csv("data/cancer_train_dt.csv")
+# cancer_dt = pd.read_csv("data/cancer_train_dt.csv")
 predictor_dt = cancer_dt.drop("Classification", axis=1)
 
 scaler = StandardScaler()
@@ -34,13 +34,17 @@ sum(pca_instance.explained_variance_ratio_[0:5])
 patient_boolean_vet = cancer_dt['Classification'] == 2
 color_vet = ["red", "blue"]
 plt.figure()
+
 non_patient_plot = plt.scatter(x=principal_component_mat[- patient_boolean_vet, 0],
                                y=principal_component_mat[- patient_boolean_vet, 1], c="navy")
 patient_plot = plt.scatter(x=principal_component_mat[patient_boolean_vet, 0],
                            y=principal_component_mat[patient_boolean_vet, 1], c="orange")
-plt.legend((non_patient_plot, patient_plot), ("Healthy", "Cancer"), loc="upper left")
+outliers_plot = plt.scatter(x=principal_component_mat[(16, 50, 37), 0],
+                            y=principal_component_mat[(16, 50, 37), 1], c="red")
+plt.legend((non_patient_plot, patient_plot, outliers_plot), ("Healthy", "Cancer", "Outliers"), loc="upper left")
+plt.savefig("figure/pca.png")
 
-# Potential outliers
+# Potential outliers from pca prospective.
 largest_5_indices_1 = np.argpartition(-principal_component_mat[:, 0], 5)[: 5]
 largest_5_indices_2 = np.argpartition(-principal_component_mat[:, 1], 5)[: 5]
 
